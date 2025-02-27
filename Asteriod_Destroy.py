@@ -15,19 +15,19 @@ shotGroup = sprite.Group()
 scoreGroup = sprite.Group()
 
 bg = sprite.Sprite(objectGroup)
-bg.image = image.load(r"C:\Users\lucas.paula_kovi\VSCodeProjects\MyOwnProjects\Space-Invaders-Game\game_assets\data\Cenario.png")
+bg.image = image.load(r"C:\Users\lucas.paula_kovi\VSCodeProjects\MyOwnProjects\asteroids_destroy\game_assets\data\Cenario.png")
 bg.image = transform.scale(bg.image, [840, 480])
 bg.rect = bg.image.get_rect()
 
 player = MainPlayer(objectGroup)
 
 # Music
-mixer.music.load(r"C:\Users\lucas.paula_kovi\VSCodeProjects\MyOwnProjects\Space-Invaders-Game\game_assets\data\GameMusic.mp3")
+mixer.music.load(r"C:\Users\lucas.paula_kovi\VSCodeProjects\MyOwnProjects\asteroids_destroy\game_assets\data\GameMusic.mp3")
 mixer.music.play(-1)
 mixer.music.set_volume(0.2)
 
 # Sounds
-shoot = mixer.Sound(r"C:\Users\lucas.paula_kovi\VSCodeProjects\MyOwnProjects\Space-Invaders-Game\game_assets\data\Shoot.wav")
+shoot = mixer.Sound(r"C:\Users\lucas.paula_kovi\VSCodeProjects\MyOwnProjects\asteroids_destroy\game_assets\data\Shoot.wav")
 
 
 gameloop = True

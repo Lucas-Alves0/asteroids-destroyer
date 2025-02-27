@@ -5,7 +5,7 @@ class MainPlayer(sprite.Sprite):
     def __init__(self, *groups):
         super().__init__(*groups)
 
-        self.image = image.load(r"C:\Users\lucas.paula_kovi\VSCodeProjects\MyOwnProjects\Space-Invaders-Game\game_assets\data\Player.png")
+        self.image = image.load(r"C:\Users\lucas.paula_kovi\VSCodeProjects\MyOwnProjects\asteroids_destroy\game_assets\data\Player.png")
         self.image = transform.scale(self.image, [100, 95])
         self.rect = Rect([50, 50, 100, 70])
 
@@ -36,7 +36,7 @@ class Asteroid(sprite.Sprite):
     def __init__(self, *groups):
         super().__init__(*groups)
 
-        self.image = image.load(r"C:\Users\lucas.paula_kovi\VSCodeProjects\MyOwnProjects\Space-Invaders-Game\game_assets\data\Asteroid.png")
+        self.image = image.load(r"C:\Users\lucas.paula_kovi\VSCodeProjects\MyOwnProjects\asteroids_destroy\game_assets\data\Asteroid.png")
         self.image = transform.scale(self.image, [70, 70])
         self.rect = Rect([50, 50, 70, 70])
 
@@ -54,7 +54,7 @@ class Shot(sprite.Sprite):
     def __init__(self, *groups):
         super().__init__(*groups)
 
-        self.image = image.load(r"C:\Users\lucas.paula_kovi\VSCodeProjects\MyOwnProjects\Space-Invaders-Game\game_assets\data\Shot.png")
+        self.image = image.load(r"C:\Users\lucas.paula_kovi\VSCodeProjects\MyOwnProjects\asteroids_destroy\game_assets\data\Shot.png")
         self.image = transform.scale(self.image, [50, 50])
         self.rect = Rect([50, 50, 50, 50])
         self.speed = 4
