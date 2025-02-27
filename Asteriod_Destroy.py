@@ -1,6 +1,6 @@
 import pygame
 from pygame import *
-from MyFirstClasses import *
+from Game_Classes import *
 from random import *
 
 
