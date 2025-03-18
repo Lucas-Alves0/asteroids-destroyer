@@ -49,9 +49,9 @@ Asteroid Destroyer é um jogo simples desenvolvido em Python utilizando a biblio
 
 - [Asteriod_Destroy.py](http://_vscodecontentref_/4): Script principal que inicializa o jogo, gerencia o loop do jogo e trata os eventos.
 - [Game_Classes.py](http://_vscodecontentref_/5): Contém as classes
-    - [MainPlayer](http://_vscodecontentref_/6)
-    - [Asteroid](http://_vscodecontentref_/7)
-    - [Shot](http://_vscodecontentref_/8) que definem os comportamentos dos sprites do jogo.
+    - [MainPlayer](http://_vscodecontentref_/6) - Define a geração do player e comportamento.
+    - [Asteroid](http://_vscodecontentref_/7) - Define a geração do asteroid e comportamento.
+    - [Shot](http://_vscodecontentref_/8) - Define a geração dos tiros e comportamento.
 - `game_assets/data/`: Diretório contendo os arquivos de imagem e som utilizados no jogo.
 
 ## Contribuição
