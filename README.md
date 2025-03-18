@@ -10,7 +10,7 @@ Asteroid Destroyer é um jogo simples desenvolvido em Python utilizando a biblio
     - Asteroid.png
     - Cenario.png
     - GameMusic.mp3
-    - Player.png
+    - Spaceship_move0.png
     - Shoot.wav
 
 
