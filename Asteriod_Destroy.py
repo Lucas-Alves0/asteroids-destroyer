@@ -72,7 +72,7 @@ while gameloop:
     clock.tick(60)
 
     if start_game == False:
-        start_msg('Press SPACE to play', fonte_2, [255, 255, 255], 275, 226)
+        start_msg('Press ESC to play', fonte_2, [255, 255, 255], 275, 226)
 
     else:
         mixer.music.set_volume(0.2)
@@ -116,7 +116,7 @@ while gameloop:
         elif event.type == KEYDOWN:
             if event.key == K_ESCAPE:
                 start_game = True
-            if event.key == K_SPACE and not gameover:
+            if event.key == K_SPACE and not gameover and start_game == True:
                 shoot.play()
                 shot = Shot(objectGroup, shotGroup)
                 shot.rect.center = player.rect.center
