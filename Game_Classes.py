@@ -8,7 +8,8 @@ class MainPlayer(sprite.Sprite):
         # Load the spaceship image
         self.image = image.load(r"C:\Users\lucas.paula_kovi\VSCodeProjects\MyOwnProjects\asteroids_destroy\game_assets\data\Spaceship_move0.png")
         self.image = transform.scale(self.image, [96, 96])
-        self.rect = Rect([96, 96, 96, 96])
+        self.rect = self.image.get_rect()
+        self.rect.topleft = [96, 96]
 
         self.speed = 0
         self.accelerate = 0.3
@@ -24,7 +25,7 @@ class MainPlayer(sprite.Sprite):
         elif keys[K_s]: # If the key S is pressed, the spaceship will move down
             self.speed += self.accelerate
         else:
-            self.speed *= 0.92 # If no key is pressed, the spaceship will slow down
+            self.speed *= 0.92 # If key is not pressed, the spaceship will slow down
 
         self.rect.y += self.speed # Move the spaceship
 
@@ -70,3 +71,4 @@ class Shot(sprite.Sprite):
 
         if self.rect.left > 840:
             self.kill()
+                   

@@ -1,7 +1,8 @@
-import pygame
-from pygame import *
 from Game_Classes import *
+from pygame import *
 from random import *
+import pygame
+import os
 
 
 pygame.init()
@@ -39,7 +40,7 @@ def show_level(x, y):
     level_img = fonte_1.render(f'Level: {str(level)}', True, [255, 255, 255])
     tela.blit(level_img, (x, y))
 
-def start_msg(text, font, text_col, x, y):
+def msg(text, font, text_col, x, y):
     start_img = font.render(text, True, text_col)
     tela.blit(start_img, (x, y))
 
@@ -69,14 +70,35 @@ clock = time.Clock()
 
 while gameloop:
 
+    def restart_game():
+        global player_score, level, difficult, asteroid_speed, gameover, start_game
+
+        asteroidGroup.empty()
+        shotGroup.empty()
+        objectGroup.empty()
+
+        tela.blit(bg.image, bg.rect)
+
+        objectGroup.add(bg)
+        player = MainPlayer(objectGroup)
+
+        player_score = 0
+        level = 1
+        difficult = 0
+        asteroid_speed = 1
+        start_game = True
+        gameover = False
+
+        return player
+
     clock.tick(60)
 
-    if start_game == False:
-        start_msg('Press ESC to play', fonte_2, [255, 255, 255], 275, 226)
+    if not start_game:
+        msg('Press ESC to start', fonte_2, [255, 255, 255], 275, 226)
 
     else:
-        mixer.music.set_volume(0.2)
-        
+        mixer.music.set_volume(0.25)
+
         if not gameover:
             objectGroup.update()
 
@@ -104,11 +126,16 @@ while gameloop:
                 level += 1
                 print('Dificuldade Aumentada!')
 
-        objectGroup.draw(tela)
 
+        objectGroup.draw(tela)
+        
         # display score
         show_score(fontX, fontY)
         show_level(levelX, levelY)
+
+        if gameover:
+            msg('Game Over! Press R to Restart', fonte_2, [255, 255, 255], 200, 220)
+
 
     for event in pygame.event.get():
         if event.type == QUIT:
@@ -116,9 +143,19 @@ while gameloop:
         elif event.type == KEYDOWN:
             if event.key == K_ESCAPE:
                 start_game = True
-            if event.key == K_SPACE and not gameover and start_game == True:
-                shoot.play()
-                shot = Shot(objectGroup, shotGroup)
-                shot.rect.center = player.rect.center
+            
+            if event.key == K_r and gameover:
+                player = restart_game()
+            if event.key == K_SPACE and not gameover and start_game:
+                if not hasattr(player, 'last_shot_time'):
+                    player.last_shot_time = 0
+                cooldown = 200  # milliseconds
+                now = pygame.time.get_ticks()
+                if now - player.last_shot_time > cooldown:
+                    shoot.play()
+                    shot = Shot(objectGroup, shotGroup)
+                    shot.rect.center = player.rect.center + pygame.math.Vector2(25, 10)
+                    player.last_shot_time = now
+
 
     display.update()
