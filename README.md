@@ -4,14 +4,20 @@ Asteroid Destroyer é um jogo simples desenvolvido em Python utilizando a biblio
 
 ## Estrutura e Arquivos do Projeto
 
- - Asteriod_Destroy.py
- - Game_Classes.py
- - game_assets
-    - Asteroid.png
-    - Cenario.png
-    - GameMusic.mp3
-    - Spaceship_move0.png
-    - Shoot.wav
+ - main.py
+ - game_classes.py
+ - game_assets:
+    - Images:
+        - Asteroid.png
+        - Cenario.png
+        - Spaceship_move0.png
+        - start_button.png
+        - exit_button.png
+        - Shot_1.png
+        - Shot.png
+    - Sounds:
+        - GameMusic.mp3
+        - Shoot.wav
 
 
 ## Requisitos
@@ -37,9 +43,9 @@ Asteroid Destroyer é um jogo simples desenvolvido em Python utilizando a biblio
 
 ## Como Jogar
 
-1. Execute o script [Asteriod_Destroy.py](https://github.com/Lucas-Alves0/asteroids-destroyer/blob/main/Asteriod_Destroy.py):
+1. Execute o script [main.py](https://github.com/Lucas-Alves0/asteroids-destroyer/blob/main/main.py):
     ```sh
-    python Asteriod_Destroy.py
+    python main.py
     ```
 2. Use as teclas `W` e `S` para mover a nave espacial para cima e para baixo.
 3. Pressione a barra de espaço para atirar nos asteroides.
@@ -47,11 +53,12 @@ Asteroid Destroyer é um jogo simples desenvolvido em Python utilizando a biblio
 
 ## Estrutura do Código
 
-- [Asteriod_Destroy.py](https://github.com/Lucas-Alves0/asteroids-destroyer/blob/main/Asteriod_Destroy.py): Script principal que inicializa o jogo, gerencia o loop do jogo e trata os eventos.
-- [Game_Classes.py](https://github.com/Lucas-Alves0/asteroids-destroyer/blob/main/Game_Classes.py): Contém as classes
+- [main.py](https://github.com/Lucas-Alves0/asteroids-destroyer/blob/main/Asteriod_Destroy.py): Script principal que inicializa o jogo, gerencia o loop do jogo e trata os eventos.
+- [game_classes.py](https://github.com/Lucas-Alves0/asteroids-destroyer/blob/main/Game_Classes.py): Contém as classes
     - [MainPlayer] - Define a geração do player e comportamento.
     - [Asteroid] - Define a geração do asteroid e comportamento.
     - [Shot] - Define a geração dos tiros e comportamento.
+    - [SpecialAttack] - Definirá um ataque carregado.
 - `game_assets/data/`: Diretório contendo os arquivos de imagem e som utilizados no jogo.
 
 ## Upcoming improvements.

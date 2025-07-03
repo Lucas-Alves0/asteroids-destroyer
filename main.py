@@ -1,4 +1,4 @@
-from Game_Classes import *
+from game_classes import *
 from pygame import *
 from random import *
 import pygame
