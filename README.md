@@ -54,6 +54,56 @@ Asteroid Destroyer é um jogo simples desenvolvido em Python utilizando a biblio
     - [Shot] - Define a geração dos tiros e comportamento.
 - `game_assets/data/`: Diretório contendo os arquivos de imagem e som utilizados no jogo.
 
+## Upcoming improvements.
+
+- Layout:
+    - Menus:
+        - Inicial
+        - Pausa.
+        - Configurações.
+            - Botões.
+            - Luz.
+            - Volume.
+            - Sensitividade.
+            - Créditos.
+        - Skins.
+        - Loja.
+    - Leaderboard.
+    - Scoreboard.
+    - Salvamento e Auto-Salvamento.
+
+- Sprites:
+    - Aliens:
+        - Atiram.
+        - Chance de desvio do tiro.
+    - Asteroids:
+        - Marrom (1 tiro de vida).
+        - Vermelho (3 tiro de vida).
+            - Na última vida despedaça e pode acertar a Nave.
+        - Roxo (5 tiro de vida).
+            - Na última vida despedaça e pode acertar a Nave.
+    - Nave:
+        - 10 de vida (Inicialmente).
+        - Fica danificada ao receber impactos/colisões.
+        - Tiros.
+            - Limite de Munição.
+            - Pegar Energia para carregar a Munição.
+            - Ataque especial (Se segurar o Espaço por um tempo carrega um ataque).
+            - Power-ups:
+                - Upgrades na Arma.
+                    - Velocidade de Ataque.
+                - Upgrade nos tiros (Inicialmente pequenas bolinhas, que melhoram para "laser").
+                - Shield (10 Secs).
+
+- Animações:
+    - Nave:
+        - Virando (Animação de rotação).
+        - Comando para um Total Spin da Nave ou Half Spin (Ficar de ponta cabeça).
+        - Nave explodindo.
+    - Asteroides:
+        - Explodindo com colisão dos tiros (Fragmentos dispersando e Explosão).
+
+
 ## Contribuição
 
 1. Faça um fork do projeto.

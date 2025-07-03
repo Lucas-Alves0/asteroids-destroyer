@@ -59,7 +59,7 @@ player = MainPlayer(objectGroup)
 # Sounds
 mixer.music.load(r"C:\Users\lucas.paula_kovi\VSCodeProjects\MyOwnProjects\asteroids_destroy\game_assets\data\GameMusic.mp3")
 mixer.music.play(-1)
-mixer.music.set_volume(0.1)
+mixer.music.set_volume(0.05)
 
 shoot = mixer.Sound(r"C:\Users\lucas.paula_kovi\VSCodeProjects\MyOwnProjects\asteroids_destroy\game_assets\data\Shoot.wav")
 
@@ -97,7 +97,7 @@ while gameloop:
         msg('Press ESC to start', fonte_2, [255, 255, 255], 275, 226)
 
     else:
-        mixer.music.set_volume(0.25)
+        mixer.music.set_volume(0.07)
 
         if not gameover:
             objectGroup.update()

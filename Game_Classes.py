@@ -71,4 +71,11 @@ class Shot(sprite.Sprite):
 
         if self.rect.left > 840:
             self.kill()
-                   
+
+class SpecialAttack(sprite.Sprite):
+    def __init__(self, *groups):
+        super().__init__(*groups)
+
+        self.image = image.load(r"C:\Users\lucas.paula_kovi\VSCodeProjects\MyOwnProjects\asteroids_destroy\game_assets\data\Special_Attack.png")
+        self.image = transform.scale(self.image, [100, 100])
+        self.rect = Rect([100, 100, 100, 100])
