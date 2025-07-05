@@ -1,9 +1,14 @@
-from game_classes import *
+from src.asteroid import Asteroid
+from src.player import MainPlayer
+from src.shot import Shot
 from pygame import *
 from random import *
 import pygame
 import os
 
+asset_dir = os.path.dirname(os.path.dirname(__file__))
+bg_dir = os.path.join(asset_dir, "asteroids_destroy", "assets", "background")
+sound_dir = os.path.join(asset_dir, "asteroids_destroy", "assets", "sounds")
 
 pygame.init()
 screen_size = [840, 480]
@@ -45,7 +50,7 @@ def msg(text, font, text_col, x, y):
     tela.blit(start_img, (x, y))
 
 bg = sprite.Sprite(objectGroup)
-bg.image = image.load(r"C:\Users\lucas.paula_kovi\VSCodeProjects\MyOwnProjects\asteroids_destroy\game_assets\data\Cenario.png")
+bg.image = image.load(os.path.join(bg_dir, "Cenario.png"))
 bg.image = transform.scale(bg.image, screen_size)
 bg.rect = bg.image.get_rect()
 
@@ -57,11 +62,11 @@ asteroid_speed = 1
 player = MainPlayer(objectGroup)
 
 # Sounds
-mixer.music.load(r"C:\Users\lucas.paula_kovi\VSCodeProjects\MyOwnProjects\asteroids_destroy\game_assets\data\GameMusic.mp3")
+mixer.music.load(os.path.join(sound_dir, "GameMusic.mp3"))
 mixer.music.play(-1)
 mixer.music.set_volume(0.05)
 
-shoot = mixer.Sound(r"C:\Users\lucas.paula_kovi\VSCodeProjects\MyOwnProjects\asteroids_destroy\game_assets\data\Shoot.wav")
+shoot = mixer.Sound(os.path.join(sound_dir, "Shoot.wav"))
 
 gameloop = True
 gameover = False

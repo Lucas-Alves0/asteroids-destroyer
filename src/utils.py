@@ -1,0 +1,1 @@
+# Funções auxiliares (carregar imagem, colisões, etc.)

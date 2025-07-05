@@ -43,7 +43,7 @@ class Asteroid(sprite.Sprite):
     def __init__(self, *groups, speed):
         super().__init__(*groups)
 
-        self.image = image.load(r"C:\Users\lucas.paula_kovi\VSCodeProjects\MyOwnProjects\asteroids_destroy\game_assets\data\Asteroid.png")
+        self.image = image.load(r"C:\Users\lucas.paula_kovi\VSCodeProjects\MyOwnProjects\asteroids_destroy\assets\enemies\Asteroid.png")
         self.image = transform.scale(self.image, [70, 70])
         self.rect = Rect([50, 50, 70, 70])
 
@@ -61,7 +61,7 @@ class Shot(sprite.Sprite):
     def __init__(self, *groups):
         super().__init__(*groups)
 
-        self.image = image.load(r"C:\Users\lucas.paula_kovi\VSCodeProjects\MyOwnProjects\asteroids_destroy\game_assets\data\Shot_1.png")
+        self.image = image.load(r"C:\Users\lucas.paula_kovi\VSCodeProjects\MyOwnProjects\asteroids_destroy\assets\data\Shot_1.png")
         self.image = transform.scale(self.image, [24, 9])
         self.rect = Rect([24, 9, 24, 9])
         self.speed = 4
@@ -71,11 +71,3 @@ class Shot(sprite.Sprite):
 
         if self.rect.left > 840:
             self.kill()
-
-class SpecialAttack(sprite.Sprite):
-    def __init__(self, *groups):
-        super().__init__(*groups)
-
-        self.image = image.load(r"C:\Users\lucas.paula_kovi\VSCodeProjects\MyOwnProjects\asteroids_destroy\game_assets\data\Special_Attack.png")
-        self.image = transform.scale(self.image, [100, 100])
-        self.rect = Rect([100, 100, 100, 100])
