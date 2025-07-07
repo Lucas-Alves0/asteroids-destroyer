@@ -2,29 +2,46 @@
 
 Asteroid Destroyer é um jogo simples desenvolvido em Python utilizando a biblioteca Pygame. O objetivo do jogo é controlar uma nave espacial e destruir asteroides enquanto evita colisões.
 
-## Estrutura e Arquivos do Projeto
+## Estrutura do Projeto
 
- - main.py
- - game_classes.py
- - game_assets:
-    - Images:
-        - Asteroid.png
-        - Cenario.png
-        - Spaceship_move0.png
-        - start_button.png
-        - exit_button.png
-        - Shot_1.png
-        - Shot.png
-    - Sounds:
-        - GameMusic.mp3
-        - Shoot.wav
-
+```
+assets/
+  background/
+    Cenario.png
+  enemies/
+    Asteroid.png
+  ships/
+    Spaceship_move0.png
+    spaceship_concepts.png
+  shoot/
+    Shot.png
+    Shot_1.png
+  sounds/
+    GameMusic.mp3
+    Shoot.wav
+  ui/
+    start_button.png
+    exit_button.png
+src/
+  asteroid.py
+  game_manager.py
+  leaderboard.py
+  menu.py
+  network.py
+  player.py
+  save_state.py
+  shot.py
+  ui.py
+  utils.py
+main.py
+config.py
+README.md
+```
 
 ## Requisitos
 
 - Python 3.x
 - Pygame
-- Random
 
 ## Instalação
 
@@ -43,7 +60,7 @@ Asteroid Destroyer é um jogo simples desenvolvido em Python utilizando a biblio
 
 ## Como Jogar
 
-1. Execute o script [main.py](https://github.com/Lucas-Alves0/asteroids-destroyer/blob/main/main.py):
+1. Execute o script principal:
     ```sh
     python main.py
     ```
@@ -53,63 +70,21 @@ Asteroid Destroyer é um jogo simples desenvolvido em Python utilizando a biblio
 
 ## Estrutura do Código
 
-- [main.py](https://github.com/Lucas-Alves0/asteroids-destroyer/blob/main/Asteriod_Destroy.py): Script principal que inicializa o jogo, gerencia o loop do jogo e trata os eventos.
-- [game_classes.py](https://github.com/Lucas-Alves0/asteroids-destroyer/blob/main/Game_Classes.py): Contém as classes
-    - [MainPlayer] - Define a geração do player e comportamento.
-    - [Asteroid] - Define a geração do asteroid e comportamento.
-    - [Shot] - Define a geração dos tiros e comportamento.
-    - [SpecialAttack] - Definirá um ataque carregado.
-- `game_assets/data/`: Diretório contendo os arquivos de imagem e som utilizados no jogo.
+- `main.py`: Script principal que inicializa o jogo, gerencia o loop do jogo e trata os eventos.
+- `src/`: Contém os módulos do jogo:
+    - `player.py`: Define o jogador e seu comportamento.
+    - `asteroid.py`: Define os asteroides e seu comportamento.
+    - `shot.py`: Define os tiros e seu comportamento.
+    - `game_manager.py`: Gerencia o estado do jogo.
+    - `ui.py`: Elementos de interface.
+    - Outros módulos auxiliares.
 
-## Upcoming improvements.
+## Melhorias Futuras
 
-- Layout:
-    - Menus:
-        - Inicial
-        - Pausa.
-        - Configurações.
-            - Botões.
-            - Luz.
-            - Volume.
-            - Sensitividade.
-            - Créditos.
-        - Skins.
-        - Loja.
-    - Leaderboard.
-    - Scoreboard.
-    - Salvamento e Auto-Salvamento.
-
-- Sprites:
-    - Aliens:
-        - Atiram.
-        - Chance de desvio do tiro.
-    - Asteroids:
-        - Marrom (1 tiro de vida).
-        - Vermelho (3 tiro de vida).
-            - Na última vida despedaça e pode acertar a Nave.
-        - Roxo (5 tiro de vida).
-            - Na última vida despedaça e pode acertar a Nave.
-    - Nave:
-        - 10 de vida (Inicialmente).
-        - Fica danificada ao receber impactos/colisões.
-        - Tiros.
-            - Limite de Munição.
-            - Pegar Energia para carregar a Munição.
-            - Ataque especial (Se segurar o Espaço por um tempo carrega um ataque).
-            - Power-ups:
-                - Upgrades na Arma.
-                    - Velocidade de Ataque.
-                - Upgrade nos tiros (Inicialmente pequenas bolinhas, que melhoram para "laser").
-                - Shield (10 Secs).
-
-- Animações:
-    - Nave:
-        - Virando (Animação de rotação).
-        - Comando para um Total Spin da Nave ou Half Spin (Ficar de ponta cabeça).
-        - Nave explodindo.
-    - Asteroides:
-        - Explodindo com colisão dos tiros (Fragmentos dispersando e Explosão).
-
+- Menus (inicial, pausa, configurações, loja, leaderboard, scoreboard)
+- Salvamento e auto-salvamento
+- Novos tipos de inimigos e power-ups
+- Animações aprimoradas
 
 ## Contribuição
 

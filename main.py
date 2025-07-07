@@ -1,108 +1,50 @@
+from src.game_manager import init_game, reset_game
 from src.asteroid import Asteroid
 from src.player import MainPlayer
-from src.shot import Shot
+from src.utils import *
+from src.ui import *
 from pygame import *
+from config import *
 from random import *
 import pygame
 import os
 
-asset_dir = os.path.dirname(os.path.dirname(__file__))
-bg_dir = os.path.join(asset_dir, "asteroids_destroy", "assets", "background")
-sound_dir = os.path.join(asset_dir, "asteroids_destroy", "assets", "sounds")
-
 pygame.init()
-screen_size = [840, 480]
-tela = display.set_mode(screen_size)
+tela = display.set_mode([SCREEN_WIDTH, SCREEN_HEIGHT])
 display.set_caption('GameProject')
 
-# Sprite(personagem)
-objectGroup = sprite.Group()
-asteroidGroup = sprite.Group()
-shotGroup = sprite.Group()
-
-# Score Point (Player Score)
-
-player_score = 0
-level = 1
-
-pygame.font.init()
-fonte_1 = pygame.font.Font('freesansbold.ttf', 18)
-fonte_2 = pygame.font.SysFont('arialblack', 26)
-fontX = 7
-fontY = 7
-
-levelX = 750
-levelY = 7
-
-startX = 420
-startY = 240
-
-def show_score(x, y):
-    score_img = fonte_1.render(f'Score: {str(player_score)}', True, [255, 255, 255])
-    tela.blit(score_img, (x, y))
-
-def show_level(x, y):
-    level_img = fonte_1.render(f'Level: {str(level)}', True, [255, 255, 255])
-    tela.blit(level_img, (x, y))
-
-def msg(text, font, text_col, x, y):
-    start_img = font.render(text, True, text_col)
-    tela.blit(start_img, (x, y))
-
-bg = sprite.Sprite(objectGroup)
-bg.image = image.load(os.path.join(bg_dir, "Cenario.png"))
-bg.image = transform.scale(bg.image, screen_size)
-bg.rect = bg.image.get_rect()
-
-# Define game variables
+game_data = init_game()
+player = game_data["player"]
+objectGroup = game_data["object_Group"]
+asteroidGroup = game_data["asteroid_group"]
+shotGroup = game_data["shot_group"]
+player_score = game_data["player_score"]
+level = game_data["level"]
+difficult = game_data["difficulty"]
+asteroid_speed = game_data["asteroid_speed"]
+bg = game_data["bg"]
+gameloop = True
 start_game = False
-difficult = 0
-asteroid_speed = 1
-
-player = MainPlayer(objectGroup)
+gameover = False
 
 # Sounds
-mixer.music.load(os.path.join(sound_dir, "GameMusic.mp3"))
+mixer.music.load(os.path.join(sounds_dir, "GameMusic.mp3"))
 mixer.music.play(-1)
-mixer.music.set_volume(0.05)
+mixer.music.set_volume(MUSIC_VOLUME)
+shoot = mixer.Sound(os.path.join(sounds_dir, "Shoot.wav"))
 
-shoot = mixer.Sound(os.path.join(sound_dir, "Shoot.wav"))
-
-gameloop = True
-gameover = False
 timer = 20
 clock = time.Clock()
 
 while gameloop:
 
-    def restart_game():
-        global player_score, level, difficult, asteroid_speed, gameover, start_game
-
-        asteroidGroup.empty()
-        shotGroup.empty()
-        objectGroup.empty()
-
-        tela.blit(bg.image, bg.rect)
-
-        objectGroup.add(bg)
-        player = MainPlayer(objectGroup)
-
-        player_score = 0
-        level = 1
-        difficult = 0
-        asteroid_speed = 1
-        start_game = True
-        gameover = False
-
-        return player
-
-    clock.tick(60)
+    clock.tick(FPS)
 
     if not start_game:
-        msg('Press ESC to start', fonte_2, [255, 255, 255], 275, 226)
+        HUD(tela, pygame.font.Font(FREE_SANS, FONT_SIZE)).draw_message('Press ESC to start', WHITE, SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2, center=True)
 
     else:
-        mixer.music.set_volume(0.07)
+        mixer.music.set_volume(MUSIC_VOLUME + 0.02)
 
         if not gameover:
             objectGroup.update()
@@ -113,15 +55,11 @@ while gameloop:
                 if random() < 0.35:
                     newAsteroid = Asteroid(objectGroup, asteroidGroup, speed=asteroid_speed)
 
-            collisionsPlayer = sprite.spritecollide(player, asteroidGroup, False, sprite.collide_mask)
-
-            if collisionsPlayer:
+            if check_collision(player, asteroidGroup):
                 print('Game Over!')
                 gameover = True
 
-            hit = sprite.groupcollide(shotGroup, asteroidGroup, True, True, sprite.collide_mask)
-
-            if hit:
+            if check_shot_collision(shotGroup, asteroidGroup):
                 player_score += 1
                 difficult += 1
                 
@@ -135,12 +73,11 @@ while gameloop:
         objectGroup.draw(tela)
         
         # display score
-        show_score(fontX, fontY)
-        show_level(levelX, levelY)
+        HUD(tela, pygame.font.Font(FREE_SANS, FONT_SIZE)).draw_score(player_score)
+        HUD(tela, pygame.font.Font(FREE_SANS, FONT_SIZE)).draw_level(level)
 
         if gameover:
-            msg('Game Over! Press R to Restart', fonte_2, [255, 255, 255], 200, 220)
-
+            HUD(tela, pygame.font.Font(FREE_SANS, FONT_SIZE)).draw_message('Game Over! Press R to Restart', WHITE, SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2, center=True)
 
     for event in pygame.event.get():
         if event.type == QUIT:
@@ -148,19 +85,16 @@ while gameloop:
         elif event.type == KEYDOWN:
             if event.key == K_ESCAPE:
                 start_game = True
-            
             if event.key == K_r and gameover:
-                player = restart_game()
+                player = reset_game(game_data)
+                player_score = game_data["player_score"]
+                level = game_data["level"]
+                difficult = game_data["difficulty"]
+                asteroid_speed = game_data["asteroid_speed"]
+                start_game = True
+                gameover = False
             if event.key == K_SPACE and not gameover and start_game:
-                if not hasattr(player, 'last_shot_time'):
-                    player.last_shot_time = 0
-                cooldown = 200  # milliseconds
-                now = pygame.time.get_ticks()
-                if now - player.last_shot_time > cooldown:
-                    shoot.play()
-                    shot = Shot(objectGroup, shotGroup)
-                    shot.rect.center = player.rect.center + pygame.math.Vector2(25, 10)
-                    player.last_shot_time = now
+                player.shoot(objectGroup, shotGroup, shoot)
 
 
     display.update()

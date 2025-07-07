@@ -1,19 +1,17 @@
-from pygame import *
-from random import *
+from pygame import sprite, image, transform, Rect
+from random import randint, random
+from config import *
 import os
-
-asset_dir = os.path.dirname(os.path.dirname(__file__))
-asteroid_dir = os.path.join(asset_dir, "assets", "enemies")
 
 class Asteroid(sprite.Sprite):
     def __init__(self, *groups, speed):
         super().__init__(*groups)
         
-        self.image = image.load(os.path.join(asteroid_dir, "Asteroid.png")).convert_alpha()
-        self.image = transform.scale(self.image, [70, 70])
-        self.rect = Rect([50, 50, 70, 70])
+        self.image = image.load(os.path.join(asteroid_dir, "Asteroid.png"))
+        self.image = transform.scale(self.image, ASTEROID_SIZE)
+        self.rect = Rect([50, 50, *ASTEROID_SIZE])
 
-        self.rect.x = 840 + randint(1, 490)
+        self.rect.x = SCREEN_WIDTH + randint(1, SCREEN_HEIGHT)
         self.rect.y = randint(1, 360)
         self.speed = speed + random() * 2
 

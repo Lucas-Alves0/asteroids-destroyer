@@ -1,20 +1,21 @@
-from pygame import *
+from pygame import sprite, image, key, K_w, K_s
+from src.utils import *
+from src.shot import *
+from config import *
 import os
 
-asset_dir = os.path.dirname(os.path.dirname(__file__))
-ships_dir = os.path.join(asset_dir, "assets", "ships")
 
 class MainPlayer(sprite.Sprite):
-    def __init__(self, *groups, skin="Spaceship_move0.png"):
+    def __init__(self, *groups):
         super().__init__(*groups)
 
-        image_path = os.path.join(ships_dir, skin)
-        self.image = image.load(image_path).convert_alpha()
-        self.image = transform.scale(self.image, [96, 96])
-        self.rect = self.image.get_rect(topleft=(96, 96))
+        sheet = image.load(os.path.join(player_dir, "spaceship_concepts.png")).convert_alpha()
+        self.image = get_frame(sheet, 0, 0)
+        self.rect = self.image.get_rect(topleft=PLAYER_START_POS)
+        self.last_shot_time = 0
 
         self.speed = 0
-        self.accelerate = 0.3
+        self.accelerate = PLAYER_ACCELERATION
 
     def update(self, *args):
         keys = key.get_pressed()
@@ -28,9 +29,15 @@ class MainPlayer(sprite.Sprite):
 
         self.rect.y += self.speed
 
-        if self.rect.top < 0:
-            self.rect.top = 0
-            self.speed = 0
-        elif self.rect.bottom > 480:
-            self.rect.bottom = 480
-            self.speed = 0
+        self.speed = clamp(self.speed, -PLAYER_MAX_SPEED, PLAYER_MAX_SPEED)
+        self.rect.y += self.speed
+        self.rect.y = clamp(self.rect.y, 0, SCREEN_HEIGHT - self.rect.height)
+
+    def shoot(self, all_sprites, shot_group, sound):
+        now = pygame.time.get_ticks()
+        if now - self.last_shot_time > 500:  # 500 ms cooldown
+            sound.play()
+            shot = Shot(all_sprites, shot_group)
+            shot.rect.center = self.rect.center + pygame.math.Vector2(32, 0)
+            self.last_shot_time = now
+            return shot
