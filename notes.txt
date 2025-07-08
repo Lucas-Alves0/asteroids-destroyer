@@ -13,7 +13,6 @@
         - Skins.
         - Loja.
     - Leaderboard.
-    - Scoreboard.
     - Salvamento e Auto-Salvamento.
 
 - Sprites:
