@@ -5,6 +5,12 @@ import pygame
 import os
 
 
+class GameState:
+    MENU = "menu"
+    PLAYING = "playing"
+    GAME_OVER = "game_over"
+    PAUSED = "paused"
+
 def init_game():
     object_Group = Group()
     asteroid_group = Group()
@@ -19,7 +25,7 @@ def init_game():
 
     return {
         "player": player,
-        "object_Group": object_Group,
+        "object_group": object_Group,
         "asteroid_group": asteroid_group,
         "shot_group": shot_group,
         "bg": bg,
@@ -31,17 +37,17 @@ def init_game():
 
 def reset_game(game_data):
 
-    game_data["object_Group"].empty()
+    game_data["object_group"].empty()
     game_data["asteroid_group"].empty()
     game_data["shot_group"].empty()
 
-    bg = pygame.sprite.Sprite(game_data["object_Group"])
+    bg = pygame.sprite.Sprite(game_data["object_group"])
     bg.image = pygame.image.load(os.path.join(bg_dir, "Cenario.png")).convert()
     bg.image = pygame.transform.scale(bg.image, (SCREEN_WIDTH, SCREEN_HEIGHT))
     bg.rect = bg.image.get_rect()
     game_data["bg"] = bg
 
-    player = MainPlayer(game_data["object_Group"])
+    player = MainPlayer(game_data["object_group"])
     game_data["player"] = player
 
     game_data["player_score"] = 0
@@ -50,3 +56,16 @@ def reset_game(game_data):
     game_data["asteroid_speed"] = ASTEROID_SPEED
 
     return player
+
+def pause_game():
+    paused = True
+    while paused:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    paused = False
+        # Optionally, draw a pause screen here
+        pygame.display.flip()  # Update the display

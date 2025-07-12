@@ -5,8 +5,13 @@ SCREEN_WIDTH = 840
 SCREEN_HEIGHT = 480
 FPS = 60
 
+# Buttons
+BUTTON_WIDTH = 64
+BUTTON_HEIGHT = 16
+BUTTON_SCALE = 5
+
 # Sounds
-MUSIC_VOLUME = 0.05
+MUSIC_VOLUME = 0.03
 SFX_VOLUME = 0.05
 
 # Cores
@@ -22,7 +27,7 @@ PURPLE = (128, 0, 128)
 PLAYER_START_POS = (SCREEN_WIDTH * 0.05, SCREEN_HEIGHT // 2)
 PLAYER_ACCELERATION = 0.3
 PLAYER_SIZE = (96, 96)
-PLAYER_MAX_SPEED = 8
+PLAYER_MAX_SPEED = 4
 PLAYER_FRAME_WIDTH = 64
 PLAYER_FRAME_HEIGHT = 44
 
@@ -38,7 +43,7 @@ ASTEROID_SIZE = (70, 70)
 FONT_SIZE = 22
 pygame.font.init()
 FREE_SANS = 'freesansbold.ttf'
-ARIAL_BLACK = 'arialblack.ttf'
+ARIAL_BLACK = 'arialblack'
 
 # assets paths
 import os
@@ -49,3 +54,5 @@ player_dir = os.path.join(asset_dir, "assets", "ships")
 shot_dir = os.path.join(asset_dir, "assets", "shoot")
 asteroid_dir = os.path.join(asset_dir, "assets", "enemies")
 sounds_dir = os.path.join(asset_dir, "assets", "sounds")
+buttons_dir = os.path.join(asset_dir, "assets", "ui")
+leaderboard_dir = os.path.join(asset_dir, "src")

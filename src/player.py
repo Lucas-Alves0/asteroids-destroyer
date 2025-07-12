@@ -20,9 +20,9 @@ class MainPlayer(sprite.Sprite):
     def update(self, *args):
         keys = key.get_pressed()
 
-        if keys[K_w]:
+        if keys[K_w] or keys[K_UP]:
             self.speed -= self.accelerate
-        elif keys[K_s]:
+        elif keys[K_s] or keys[K_DOWN]:
             self.speed += self.accelerate
         else:
             self.speed *= 0.92
@@ -31,11 +31,11 @@ class MainPlayer(sprite.Sprite):
 
         self.speed = clamp(self.speed, -PLAYER_MAX_SPEED, PLAYER_MAX_SPEED)
         self.rect.y += self.speed
-        self.rect.y = clamp(self.rect.y, 0, SCREEN_HEIGHT - self.rect.height)
+        self.rect.y = clamp(self.rect.y, 0, SCREEN_HEIGHT - self.rect.height) # Limite vertical
 
     def shoot(self, all_sprites, shot_group, sound):
         now = pygame.time.get_ticks()
-        if now - self.last_shot_time > 500:  # 500 ms cooldown
+        if now - self.last_shot_time > 400:  # 400 ms cooldown
             sound.play()
             shot = Shot(all_sprites, shot_group)
             shot.rect.center = self.rect.center + pygame.math.Vector2(32, 0)
