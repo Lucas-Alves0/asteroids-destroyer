@@ -1,104 +1,131 @@
-# Asteroid Destroyer
+# Asteroids Destroyer
 
-Asteroid Destroyer é um jogo simples desenvolvido em Python utilizando a biblioteca Pygame. O objetivo do jogo é controlar uma nave espacial e destruir asteroides enquanto evita colisões.
+Um jogo de tiro espacial inspirado no clássico Asteroids, com sistema completo de autenticação e interfaces modernas.
 
-## Estrutura do Projeto
+## 🚀 Funcionalidades
+
+### Sistema de Autenticação
+- **Registro de jogadores** com validação de dados
+- **Login seguro** com senhas criptografadas
+- **Perfis personalizados** com estatísticas detalhadas
+- **Sistema de conquistas** desbloqueáveis
+
+### Interface Moderna
+- **Tela de login/registro** com campos interativos
+- **Menu principal** com múltiplas opções
+- **Tela de perfil** com estatísticas e conquistas
+- **Configurações** com controles de volume e dificuldade
+- **Ranking global** com diferentes categorias
+
+### Jogo
+- **Controles intuitivos**: W/S ou setas para mover, ESPAÇO para atirar
+- **Sistema de níveis** com dificuldade progressiva
+- **Sons e música** com controles de volume
+- **Tutorial interativo** para novos jogadores
+- **Sistema de pontuação** persistente
+
+## 🎮 Como Jogar
+
+1. **Primeira execução**: Crie uma conta no sistema
+2. **Login**: Use suas credenciais para acessar o jogo
+3. **Menu principal**: Escolha entre jogar, ver perfil, configurações ou ranking
+4. **Jogo**: Destrua asteroides para ganhar pontos
+5. **Objetivo**: Sobreviva o máximo possível e alcance a maior pontuação
+
+## 📊 Sistema de Estatísticas
+
+O jogo rastreia automaticamente:
+- **Total de jogos** jogados
+- **Melhor pontuação** pessoal
+- **Tempo total** jogado
+- **Pontuação média** por jogo
+- **Conquistas** desbloqueadas
+
+## 🏆 Sistema de Conquistas
+
+Conquistas disponíveis:
+- **Primeiro Jogo**: Complete seu primeiro jogo
+- **Destruidor**: Destrua 10 asteroides
+- **Veterano**: Jogue 10 partidas
+- **Mestre**: Atinga 100 pontos
+- **Lendário**: Atinga 500 pontos
+- **Viciado**: Jogue por 1 hora
+- **Perfeccionista**: Complete 50 jogos
+- **Campeão**: Atinga 1000 pontos
+
+## ⚙️ Configurações
+
+- **Volume da música**: Controle o volume da trilha sonora
+- **Volume dos efeitos**: Ajuste sons de tiro e colisões
+- **Dificuldade**: Escolha entre Fácil, Normal ou Difícil
+- **Tela cheia**: Ative/desative modo fullscreen
+- **VSync**: Sincronização vertical
+
+## 📈 Ranking Global
+
+O jogo mantém rankings em diferentes categorias:
+- **Melhores pontuações**: Ranking por maior pontuação
+- **Mais jogos**: Ranking por total de partidas
+- **Mais tempo jogado**: Ranking por tempo total
+
+## 🛠️ Tecnologias
+
+- **Python 3.x**
+- **Pygame** para gráficos e sons
+- **JSON** para persistência de dados
+- **Hash SHA-256** para segurança de senhas
+
+## 📁 Estrutura do Projeto
 
 ```
-assets/
-  background/
-    Cenario.png
-  enemies/
-    Asteroid.png
-  ships/
-    Spaceship_move0.png
-    spaceship_concepts.png
-  shoot/
-    Shot.png
-    Shot_1.png
-  sounds/
-    GameMusic.mp3
-    Shoot.wav
-  ui/
-    start_button.png
-    exit_button.png
-src/
-  asteroid.py
-  game_manager.py
-  leaderboard.py
-  menu.py
-  network.py
-  player.py
-  save_state.py
-  shot.py
-  ui.py
-  utils.py
-main.py
-config.py
-README.md
+asteroids-destroyer/
+├── assets/                 # Recursos gráficos e sonoros
+├── src/                    # Código fonte
+│   ├── auth_ui.py         # Interface de autenticação
+│   ├── main_menu.py       # Menu principal
+│   ├── profile_screen.py  # Tela de perfil
+│   ├── settings_screen.py # Configurações
+│   ├── leaderboard_screen.py # Ranking
+│   ├── player_registration.py # Sistema de registro
+│   └── ...                # Outros módulos do jogo
+├── main.py                # Arquivo principal
+├── config.py              # Configurações
+├── players.json           # Dados dos jogadores
+└── leaderboard.json       # Ranking global
 ```
 
-## Requisitos
+## 🚀 Como Executar
 
-- Python 3.x
-- Pygame
+1. **Instale Python 3.x**
+2. **Instale Pygame**: `pip install pygame`
+3. **Execute o jogo**: `python main.py`
 
-## Instalação
+## 💾 Dados Salvos
 
-1. Clone o repositório:
-    ```sh
-    git clone https://github.com/seu-usuario/asteroid-destroy.git
-    ```
-2. Navegue até o diretório do projeto:
-    ```sh
-    cd asteroid-destroy/MyOwnProjects/asteroids_destroy
-    ```
-3. Instale as dependências:
-    ```sh
-    pip install pygame
-    ```
+O jogo salva automaticamente:
+- **players.json**: Dados de todos os jogadores registrados
+- **leaderboard.json**: Ranking global de pontuações
 
-## Como Jogar
+## 🎯 Controles
 
-1. Execute o script principal:
-    ```sh
-    python main.py
-    ```
-2. Use as teclas `W` e `S` para mover a nave espacial para cima e para baixo.
-3. Pressione a barra de espaço para atirar nos asteroides.
-4. Evite colidir com os asteroides. Se colidir, o jogo termina.
+- **W/S ou ↑/↓**: Mover nave
+- **ESPAÇO**: Atirar
+- **ESC**: Voltar ao menu (durante o jogo)
+- **Mouse**: Navegar pelas interfaces
 
-## Estrutura do Código
+## 🔒 Segurança
 
-- `main.py`: Script principal que inicializa o jogo, gerencia o loop do jogo e trata os eventos.
-- `src/`: Contém os módulos do jogo:
-    - `player.py`: Define o jogador e seu comportamento.
-    - `asteroid.py`: Define os asteroides e seu comportamento.
-    - `shot.py`: Define os tiros e seu comportamento.
-    - `game_manager.py`: Gerencia o estado do jogo.
-    - `ui.py`: Elementos de interface.
-    - Outros módulos auxiliares.
+- Senhas são criptografadas com SHA-256
+- Validação de dados de entrada
+- Proteção contra dados corrompidos
 
-## Melhorias Futuras
+## 🎨 Interface
 
-- Menus (inicial, pausa, configurações, loja, leaderboard, scoreboard)
-- Salvamento e auto-salvamento
-- Novos tipos de inimigos e power-ups
-- Animações aprimoradas
+- Design moderno e intuitivo
+- Cores consistentes e acessíveis
+- Feedback visual para todas as ações
+- Responsivo a diferentes resoluções
 
-## Contribuição
+---
 
-1. Faça um fork do projeto.
-2. Crie uma nova branch:
-    ```sh
-    git checkout -b minha-nova-funcionalidade
-    ```
-3. Faça suas alterações e commit:
-    ```sh
-    git commit -am 'Adiciona nova funcionalidade'
-    ```
-4. Envie para o repositório remoto:
-    ```sh
-    git push origin minha-nova-funcionalidade
-    ```
-5. Abra um Pull Request.
+**Desenvolvido com ❤️ para proporcionar uma experiência de jogo completa e envolvente!**

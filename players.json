@@ -1,0 +1,18 @@
+{
+    "gui": {
+        "email": "email@email.com",
+        "password": "240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9",
+        "created_at": "2025-07-15T13:48:16.418744",
+        "last_login": "2025-07-15T13:48:24.380427",
+        "total_games": 0,
+        "total_score": 0,
+        "highest_score": 0,
+        "total_playtime": 0,
+        "achievements": [],
+        "settings": {
+            "music_volume": 0.5,
+            "sfx_volume": 0.5,
+            "difficulty": "normal"
+        }
+    }
+}
