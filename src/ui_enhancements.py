@@ -43,8 +43,10 @@ class AnimatedButton:
         self.current_color = color
         self.font = pygame.font.Font(FREE_SANS, font_size)
         self.hover = False
-        self.animation_speed = 0.1
+        self.animation_speed = 0.05  # Mais suave
         self.glow_alpha = 0
+        self.scale = 1.0  # Escala para efeito de pressionar
+        self.target_scale = 1.0
         
     def handle_event(self, event):
         if event.type == pygame.MOUSEMOTION:
@@ -57,39 +59,50 @@ class AnimatedButton:
         target_color = self.hover_color if self.hover else self.color
         self.current_color = self.lerp_color(self.current_color, target_color, self.animation_speed)
         
+        # Efeito de escala suave
+        target_scale = 1.05 if self.hover else 1.0
+        self.scale += (target_scale - self.scale) * 0.1
+        
         if self.hover:
-            self.glow_alpha = min(255, self.glow_alpha + 15)
+            self.glow_alpha = min(255, self.glow_alpha + 10)  # Mais suave
         else:
-            self.glow_alpha = max(0, self.glow_alpha - 15)
+            self.glow_alpha = max(0, self.glow_alpha - 10)  # Mais suave
     
     def lerp_color(self, color1, color2, factor):
         return tuple(int(color1[i] + (color2[i] - color1[i]) * factor) for i in range(3))
     
     def draw(self, screen):
+        # Calcular posição e tamanho escalados
+        scaled_width = int(self.rect.width * self.scale)
+        scaled_height = int(self.rect.height * self.scale)
+        scaled_x = self.rect.centerx - scaled_width // 2
+        scaled_y = self.rect.centery - scaled_height // 2
+        
         # Desenhar brilho quando hover
         if self.glow_alpha > 0:
-            glow_surface = pygame.Surface((self.rect.width + 20, self.rect.height + 20))
+            glow_surface = pygame.Surface((scaled_width + 20, scaled_height + 20))
             glow_surface.set_alpha(self.glow_alpha)
             glow_surface.fill(self.hover_color)
-            screen.blit(glow_surface, (self.rect.x - 10, self.rect.y - 10))
+            screen.blit(glow_surface, (scaled_x - 10, scaled_y - 10))
         
         # Desenhar botão com gradiente
-        gradient_surface = pygame.Surface((self.rect.width, self.rect.height))
-        for i in range(self.rect.height):
-            ratio = i / self.rect.height
+        gradient_surface = pygame.Surface((scaled_width, scaled_height))
+        for i in range(scaled_height):
+            ratio = i / scaled_height
             color = self.lerp_color(self.current_color, (max(0, self.current_color[0] - 30), 
                                    max(0, self.current_color[1] - 30), 
                                    max(0, self.current_color[2] - 30)), ratio)
-            pygame.draw.line(gradient_surface, color, (0, i), (self.rect.width, i))
+            pygame.draw.line(gradient_surface, color, (0, i), (scaled_width, i))
         
-        screen.blit(gradient_surface, self.rect)
+        screen.blit(gradient_surface, (scaled_x, scaled_y))
         
-        # Borda
-        pygame.draw.rect(screen, (255, 255, 255), self.rect, 2)
+        # Borda com sombra
+        border_color = (200, 200, 200) if self.hover else (150, 150, 150)
+        pygame.draw.rect(screen, border_color, (scaled_x, scaled_y, scaled_width, scaled_height), 2)
         
         # Texto
         text_surface = self.font.render(self.text, True, (255, 255, 255))
-        text_rect = text_surface.get_rect(center=self.rect.center)
+        text_rect = text_surface.get_rect(center=(scaled_x + scaled_width//2, scaled_y + scaled_height//2))
         screen.blit(text_surface, text_rect)
 
 class ParticleSystem:

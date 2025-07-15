@@ -1,6 +1,7 @@
 import pygame
 from config import *
 from datetime import datetime
+from src.ui_enhancements import GradientBackground, AnimatedButton, GlowingText, StarField, ProgressBar
 
 class ProfileScreen:
     def __init__(self, screen, player_reg):
@@ -10,55 +11,64 @@ class ProfileScreen:
         self.small_font = pygame.font.Font(FREE_SANS, 18)
         self.title_font = pygame.font.Font(FREE_SANS, 32)
         
-        # Botão voltar
-        self.back_button = pygame.Rect(50, 50, 120, 40)
+        # Elementos visuais
+        self.background = GradientBackground(screen)
+        self.star_field = StarField(screen)
+        self.title_text = GlowingText("PERFIL DO JOGADOR", 32, (255, 255, 255), SCREEN_WIDTH//2, 60, center=True)
+        
+        # Botão voltar animado
+        self.back_button = AnimatedButton(50, 50, 120, 40, "VOLTAR", (0, 100, 200), (0, 150, 255))
         
         # Seções do perfil
         self.sections = ['ESTATÍSTICAS', 'CONQUISTAS', 'HISTÓRICO']
         self.current_section = 0
         
-        # Botões de seção
+        # Botões de seção animados
         self.section_buttons = []
         for i, section in enumerate(self.sections):
             x = 200 + i * 200
-            self.section_buttons.append(pygame.Rect(x, 120, 150, 40))
+            self.section_buttons.append(AnimatedButton(x, 120, 150, 40, section, (100, 100, 100), (150, 150, 150)))
     
     def handle_events(self, events):
         for event in events:
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
-                    if self.back_button.collidepoint(event.pos):
+                    if self.back_button.rect.collidepoint(event.pos):
                         return "MAIN_MENU"
                     
                     # Verificar seções
                     for i, button in enumerate(self.section_buttons):
-                        if button.collidepoint(event.pos):
+                        if button.rect.collidepoint(event.pos):
                             self.current_section = i
+            
+            # Handle animated buttons
+            self.back_button.handle_event(event)
+            for button in self.section_buttons:
+                button.handle_event(event)
+        
         return None
     
     def draw(self):
-        self.screen.fill(BLACK)
+        # Desenhar fundo animado
+        self.background.update()
+        self.background.draw()
         
-        # Título
-        title = self.title_font.render("PERFIL DO JOGADOR", True, WHITE)
-        title_rect = title.get_rect(center=(SCREEN_WIDTH//2, 60))
-        self.screen.blit(title, title_rect)
+        # Desenhar campo de estrelas
+        self.star_field.update()
+        self.star_field.draw()
         
-        # Botão voltar
-        pygame.draw.rect(self.screen, BLUE, self.back_button)
-        back_text = self.small_font.render("VOLTAR", True, WHITE)
-        back_text_rect = back_text.get_rect(center=self.back_button.center)
-        self.screen.blit(back_text, back_text_rect)
+        # Atualizar e desenhar título animado
+        self.title_text.update()
+        self.title_text.draw(self.screen)
         
-        # Botões de seção
-        for i, (button, section) in enumerate(zip(self.section_buttons, self.sections)):
-            color = GREEN if i == self.current_section else BLUE
-            pygame.draw.rect(self.screen, color, button)
-            pygame.draw.rect(self.screen, WHITE, button, 2)
-            
-            section_text = self.small_font.render(section, True, WHITE)
-            section_text_rect = section_text.get_rect(center=button.center)
-            self.screen.blit(section_text, section_text_rect)
+        # Atualizar e desenhar botão voltar
+        self.back_button.update()
+        self.back_button.draw(self.screen)
+        
+        # Atualizar e desenhar botões de seção
+        for i, button in enumerate(self.section_buttons):
+            button.update()
+            button.draw(self.screen)
         
         # Conteúdo da seção
         if self.current_section == 0:

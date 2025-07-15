@@ -24,7 +24,7 @@ class InputField:
         
         if event.type == pygame.KEYDOWN and self.active:
             if event.key == pygame.K_RETURN:
-                return True
+                return "ENTER"
             elif event.key == pygame.K_BACKSPACE:
                 self.text = self.text[:-1]
             elif event.key == pygame.K_TAB:
@@ -121,15 +121,42 @@ class AuthUI:
             
             # Handle input fields and animated buttons
             if self.current_state == "login":
-                self.login_username.handle_event(event)
-                self.login_password.handle_event(event)
+                result_username = self.login_username.handle_event(event)
+                result_password = self.login_password.handle_event(event)
+                
+                # Se Enter foi pressionado em qualquer campo, fazer login
+                if result_username == "ENTER" or result_password == "ENTER":
+                    success, message = self.player_reg.login_player(
+                        self.login_username.text, 
+                        self.login_password.text
+                    )
+                    self.show_message(message, success)
+                    if success:
+                        return "MAIN_MENU"
+                
                 self.login_button.handle_event(event)
                 self.switch_to_register_button.handle_event(event)
             else:
-                self.register_username.handle_event(event)
-                self.register_email.handle_event(event)
-                self.register_password.handle_event(event)
-                self.register_confirm_password.handle_event(event)
+                result_username = self.register_username.handle_event(event)
+                result_email = self.register_email.handle_event(event)
+                result_password = self.register_password.handle_event(event)
+                result_confirm = self.register_confirm_password.handle_event(event)
+                
+                # Se Enter foi pressionado em qualquer campo, tentar registrar
+                if any(result == "ENTER" for result in [result_username, result_email, result_password, result_confirm]):
+                    if self.register_password.text != self.register_confirm_password.text:
+                        self.show_message("Senhas não coincidem!", False)
+                    else:
+                        success, message = self.player_reg.register_player(
+                            self.register_username.text,
+                            self.register_email.text,
+                            self.register_password.text
+                        )
+                        self.show_message(message, success)
+                        if success:
+                            self.current_state = "login"
+                            self.clear_fields()
+                
                 self.register_button.handle_event(event)
                 self.switch_to_login_button.handle_event(event)
         

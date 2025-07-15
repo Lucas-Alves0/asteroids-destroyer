@@ -204,7 +204,7 @@ while gameloop:
         # Tutorial
         if show_tutorial and (tutorial_timer // 500) % 2 == 0:
             HUD(tela, pygame.font.Font(FREE_SANS, FONT_SIZE)).draw_message(
-                'W/S para mover / CIMA ou BAIXO | ESPAÇO para atirar',
+                'WASD ou SETAS para mover | ESPAÇO para atirar',
                 WHITE,
                 SCREEN_WIDTH // 2,
                 SCREEN_HEIGHT // 2,

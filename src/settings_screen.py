@@ -1,6 +1,7 @@
 import pygame
 from config import *
 from src.player_registration import PlayerRegistration
+from src.ui_enhancements import GradientBackground, AnimatedButton, GlowingText, StarField
 
 class Slider:
     def __init__(self, x, y, width, height, min_val, max_val, initial_val):
@@ -43,9 +44,14 @@ class SettingsScreen:
         self.small_font = pygame.font.Font(FREE_SANS, 18)
         self.title_font = pygame.font.Font(FREE_SANS, 32)
         
-        # Botão voltar
-        self.back_button = pygame.Rect(50, 50, 120, 40)
-        self.save_button = pygame.Rect(SCREEN_WIDTH - 170, 50, 120, 40)
+        # Elementos visuais
+        self.background = GradientBackground(screen)
+        self.star_field = StarField(screen)
+        self.title_text = GlowingText("CONFIGURAÇÕES", 32, (255, 255, 255), SCREEN_WIDTH//2, 60, center=True)
+        
+        # Botões animados
+        self.back_button = AnimatedButton(50, 50, 120, 40, "VOLTAR", (0, 100, 200), (0, 150, 255))
+        self.save_button = AnimatedButton(SCREEN_WIDTH - 170, 50, 120, 40, "SALVAR", (0, 150, 0), (0, 200, 0))
         
         # Sliders
         self.music_slider = Slider(200, 150, 300, 20, 0.0, 1.0, 0.5)
@@ -57,13 +63,13 @@ class SettingsScreen:
         self.difficulty_buttons = []
         for i, option in enumerate(self.difficulty_options):
             x = 200 + i * 120
-            self.difficulty_buttons.append(pygame.Rect(x, 300, 100, 40))
+            self.difficulty_buttons.append(AnimatedButton(x, 300, 100, 40, option, (100, 100, 100), (150, 150, 150)))
         
         # Outras opções
-        self.fullscreen_button = pygame.Rect(200, 380, 200, 40)
+        self.fullscreen_button = AnimatedButton(200, 380, 200, 40, "TELA CHEIA", (100, 100, 100), (150, 150, 150))
         self.fullscreen_enabled = False
         
-        self.vsync_button = pygame.Rect(200, 440, 200, 40)
+        self.vsync_button = AnimatedButton(200, 440, 200, 40, "VSYNC", (100, 100, 100), (150, 150, 150))
         self.vsync_enabled = True
         
         # Carregar configurações atuais
@@ -102,45 +108,52 @@ class SettingsScreen:
         for event in events:
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
-                    if self.back_button.collidepoint(event.pos):
+                    if self.back_button.rect.collidepoint(event.pos):
                         return "MAIN_MENU"
-                    elif self.save_button.collidepoint(event.pos):
+                    elif self.save_button.rect.collidepoint(event.pos):
                         self.save_settings()
                         return "MAIN_MENU"
-                    elif self.fullscreen_button.collidepoint(event.pos):
+                    elif self.fullscreen_button.rect.collidepoint(event.pos):
                         self.fullscreen_enabled = not self.fullscreen_enabled
-                    elif self.vsync_button.collidepoint(event.pos):
+                    elif self.vsync_button.rect.collidepoint(event.pos):
                         self.vsync_enabled = not self.vsync_enabled
                     
                     # Verificar botões de dificuldade
                     for i, button in enumerate(self.difficulty_buttons):
-                        if button.collidepoint(event.pos):
+                        if button.rect.collidepoint(event.pos):
                             self.current_difficulty = i
             
-            # Handle sliders
+            # Handle sliders and animated buttons
             self.music_slider.handle_event(event)
             self.sfx_slider.handle_event(event)
+            self.back_button.handle_event(event)
+            self.save_button.handle_event(event)
+            self.fullscreen_button.handle_event(event)
+            self.vsync_button.handle_event(event)
+            for button in self.difficulty_buttons:
+                button.handle_event(event)
         
         return None
     
     def draw(self):
-        self.screen.fill(BLACK)
+        # Desenhar fundo animado
+        self.background.update()
+        self.background.draw()
         
-        # Título
-        title = self.title_font.render("CONFIGURAÇÕES", True, WHITE)
-        title_rect = title.get_rect(center=(SCREEN_WIDTH//2, 60))
-        self.screen.blit(title, title_rect)
+        # Desenhar campo de estrelas
+        self.star_field.update()
+        self.star_field.draw()
         
-        # Botões
-        pygame.draw.rect(self.screen, BLUE, self.back_button)
-        back_text = self.small_font.render("VOLTAR", True, WHITE)
-        back_text_rect = back_text.get_rect(center=self.back_button.center)
-        self.screen.blit(back_text, back_text_rect)
+        # Atualizar e desenhar título animado
+        self.title_text.update()
+        self.title_text.draw(self.screen)
         
-        pygame.draw.rect(self.screen, GREEN, self.save_button)
-        save_text = self.small_font.render("SALVAR", True, BLACK)
-        save_text_rect = save_text.get_rect(center=self.save_button.center)
-        self.screen.blit(save_text, save_text_rect)
+        # Atualizar e desenhar botões
+        self.back_button.update()
+        self.back_button.draw(self.screen)
+        
+        self.save_button.update()
+        self.save_button.draw(self.screen)
         
         # Seção de Áudio
         audio_title = self.font.render("ÁUDIO", True, WHITE)
@@ -153,35 +166,21 @@ class SettingsScreen:
         game_title = self.font.render("JOGO", True, WHITE)
         self.screen.blit(game_title, (50, 270))
         
-        # Botões de dificuldade
-        for i, (button, option) in enumerate(zip(self.difficulty_buttons, self.difficulty_options)):
-            color = GREEN if i == self.current_difficulty else BLUE
-            pygame.draw.rect(self.screen, color, button)
-            pygame.draw.rect(self.screen, WHITE, button, 2)
-            
-            option_text = self.small_font.render(option, True, WHITE)
-            option_text_rect = option_text.get_rect(center=button.center)
-            self.screen.blit(option_text, option_text_rect)
+        # Atualizar e desenhar botões de dificuldade
+        for i, button in enumerate(self.difficulty_buttons):
+            button.update()
+            button.draw(self.screen)
         
         # Outras opções
         other_title = self.font.render("OUTRAS OPÇÕES", True, WHITE)
         self.screen.blit(other_title, (50, 350))
         
-        # Fullscreen
-        fullscreen_color = GREEN if self.fullscreen_enabled else BLUE
-        pygame.draw.rect(self.screen, fullscreen_color, self.fullscreen_button)
-        pygame.draw.rect(self.screen, WHITE, self.fullscreen_button, 2)
-        fullscreen_text = self.small_font.render("TELA CHEIA", True, WHITE)
-        fullscreen_text_rect = fullscreen_text.get_rect(center=self.fullscreen_button.center)
-        self.screen.blit(fullscreen_text, fullscreen_text_rect)
+        # Atualizar e desenhar botões de opções
+        self.fullscreen_button.update()
+        self.fullscreen_button.draw(self.screen)
         
-        # VSync
-        vsync_color = GREEN if self.vsync_enabled else BLUE
-        pygame.draw.rect(self.screen, vsync_color, self.vsync_button)
-        pygame.draw.rect(self.screen, WHITE, self.vsync_button, 2)
-        vsync_text = self.small_font.render("VSYNC", True, WHITE)
-        vsync_text_rect = vsync_text.get_rect(center=self.vsync_button.center)
-        self.screen.blit(vsync_text, vsync_text_rect)
+        self.vsync_button.update()
+        self.vsync_button.draw(self.screen)
         
         # Informações
         info_y = 500
