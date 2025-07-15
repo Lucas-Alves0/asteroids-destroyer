@@ -1,6 +1,7 @@
 import pygame
 from config import *
 from src.player_registration import PlayerRegistration
+from src.ui_enhancements import GradientBackground, AnimatedButton, AnimatedText, GlowingText, StarField
 
 class InputField:
     def __init__(self, x, y, width, height, placeholder="", is_password=False):
@@ -58,6 +59,11 @@ class AuthUI:
         self.message = ""
         self.message_timer = 0
         
+        # Elementos visuais
+        self.background = GradientBackground(screen)
+        self.star_field = StarField(screen)
+        self.title_text = GlowingText("ASTEROIDS DESTROYER", 36, (255, 255, 255), SCREEN_WIDTH//2, 80, center=True)
+        
         # Campos de login
         self.login_username = InputField(SCREEN_WIDTH//2 - 150, 200, 300, 40, "Nome de usuário")
         self.login_password = InputField(SCREEN_WIDTH//2 - 150, 260, 300, 40, "Senha", is_password=True)
@@ -68,11 +74,11 @@ class AuthUI:
         self.register_password = InputField(SCREEN_WIDTH//2 - 150, 300, 300, 40, "Senha", is_password=True)
         self.register_confirm_password = InputField(SCREEN_WIDTH//2 - 150, 360, 300, 40, "Confirmar senha", is_password=True)
         
-        # Botões
-        self.login_button = pygame.Rect(SCREEN_WIDTH//2 - 100, 320, 200, 50)
-        self.register_button = pygame.Rect(SCREEN_WIDTH//2 - 100, 420, 200, 50)
-        self.switch_to_register_button = pygame.Rect(SCREEN_WIDTH//2 - 100, 380, 200, 50)
-        self.switch_to_login_button = pygame.Rect(SCREEN_WIDTH//2 - 100, 480, 200, 50)
+        # Botões animados
+        self.login_button = AnimatedButton(SCREEN_WIDTH//2 - 100, 320, 200, 50, "ENTRAR", (0, 150, 0), (0, 200, 0))
+        self.register_button = AnimatedButton(SCREEN_WIDTH//2 - 100, 420, 200, 50, "CRIAR CONTA", (0, 150, 0), (0, 200, 0))
+        self.switch_to_register_button = AnimatedButton(SCREEN_WIDTH//2 - 100, 380, 200, 50, "CRIAR CONTA", (0, 100, 200), (0, 150, 255))
+        self.switch_to_login_button = AnimatedButton(SCREEN_WIDTH//2 - 100, 480, 200, 50, "VOLTAR AO LOGIN", (0, 100, 200), (0, 150, 255))
         
         self.font = pygame.font.Font(FREE_SANS, 24)
         self.small_font = pygame.font.Font(FREE_SANS, 18)
@@ -81,7 +87,7 @@ class AuthUI:
         for event in events:
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if self.current_state == "login":
-                    if self.login_button.collidepoint(event.pos):
+                    if self.login_button.rect.collidepoint(event.pos):
                         success, message = self.player_reg.login_player(
                             self.login_username.text, 
                             self.login_password.text
@@ -90,12 +96,12 @@ class AuthUI:
                         if success:
                             return "MAIN_MENU"
                     
-                    elif self.switch_to_register_button.collidepoint(event.pos):
+                    elif self.switch_to_register_button.rect.collidepoint(event.pos):
                         self.current_state = "register"
                         self.clear_fields()
                 
                 elif self.current_state == "register":
-                    if self.register_button.collidepoint(event.pos):
+                    if self.register_button.rect.collidepoint(event.pos):
                         if self.register_password.text != self.register_confirm_password.text:
                             self.show_message("Senhas não coincidem!", False)
                         else:
@@ -109,19 +115,23 @@ class AuthUI:
                                 self.current_state = "login"
                                 self.clear_fields()
                     
-                    elif self.switch_to_login_button.collidepoint(event.pos):
+                    elif self.switch_to_login_button.rect.collidepoint(event.pos):
                         self.current_state = "login"
                         self.clear_fields()
             
-            # Handle input fields
+            # Handle input fields and animated buttons
             if self.current_state == "login":
                 self.login_username.handle_event(event)
                 self.login_password.handle_event(event)
+                self.login_button.handle_event(event)
+                self.switch_to_register_button.handle_event(event)
             else:
                 self.register_username.handle_event(event)
                 self.register_email.handle_event(event)
                 self.register_password.handle_event(event)
                 self.register_confirm_password.handle_event(event)
+                self.register_button.handle_event(event)
+                self.switch_to_login_button.handle_event(event)
         
         return None
     
@@ -143,12 +153,17 @@ class AuthUI:
             self.message_timer -= 1
     
     def draw(self):
-        self.screen.fill(BLACK)
+        # Desenhar fundo animado
+        self.background.update()
+        self.background.draw()
         
-        # Título
-        title = self.font.render("ASTEROIDS DESTROYER", True, WHITE)
-        title_rect = title.get_rect(center=(SCREEN_WIDTH//2, 80))
-        self.screen.blit(title, title_rect)
+        # Desenhar campo de estrelas
+        self.star_field.update()
+        self.star_field.draw()
+        
+        # Atualizar e desenhar título animado
+        self.title_text.update()
+        self.title_text.draw(self.screen)
         
         if self.current_state == "login":
             self.draw_login_screen()
@@ -171,16 +186,12 @@ class AuthUI:
         self.login_username.draw(self.screen)
         self.login_password.draw(self.screen)
         
-        # Botões
-        pygame.draw.rect(self.screen, GREEN, self.login_button)
-        login_text = self.small_font.render("ENTRAR", True, BLACK)
-        login_text_rect = login_text.get_rect(center=self.login_button.center)
-        self.screen.blit(login_text, login_text_rect)
+        # Atualizar e desenhar botões animados
+        self.login_button.update()
+        self.login_button.draw(self.screen)
         
-        pygame.draw.rect(self.screen, BLUE, self.switch_to_register_button)
-        switch_text = self.small_font.render("CRIAR CONTA", True, WHITE)
-        switch_text_rect = switch_text.get_rect(center=self.switch_to_register_button.center)
-        self.screen.blit(switch_text, switch_text_rect)
+        self.switch_to_register_button.update()
+        self.switch_to_register_button.draw(self.screen)
     
     def draw_register_screen(self):
         # Subtítulo
@@ -194,16 +205,12 @@ class AuthUI:
         self.register_password.draw(self.screen)
         self.register_confirm_password.draw(self.screen)
         
-        # Botões
-        pygame.draw.rect(self.screen, GREEN, self.register_button)
-        register_text = self.small_font.render("CRIAR CONTA", True, BLACK)
-        register_text_rect = register_text.get_rect(center=self.register_button.center)
-        self.screen.blit(register_text, register_text_rect)
+        # Atualizar e desenhar botões animados
+        self.register_button.update()
+        self.register_button.draw(self.screen)
         
-        pygame.draw.rect(self.screen, BLUE, self.switch_to_login_button)
-        switch_text = self.small_font.render("VOLTAR AO LOGIN", True, WHITE)
-        switch_text_rect = switch_text.get_rect(center=self.switch_to_login_button.center)
-        self.screen.blit(switch_text, switch_text_rect)
+        self.switch_to_login_button.update()
+        self.switch_to_login_button.draw(self.screen)
     
     def get_current_player(self):
         return self.player_reg.current_player 
